@@ -4,7 +4,7 @@ import { List, ListItem, ListItemText } from '@material-ui/core'
 const TasksList = ({ data }) => {
 	return (
 		<List>
-			{list.reverse().map((e, i) => (
+			{data.reverse().map((e, i) => (
 				<ListItem button key={i}>
 					<ListItemText>{e}</ListItemText>
 				</ListItem>
