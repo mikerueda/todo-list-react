@@ -1,6 +1,7 @@
 import React from 'react'
 import { CssBaseline, Container } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField'
+import TasksList from './components/TasksList'
 
 class App extends React.Component {
 	state = {
@@ -33,6 +34,7 @@ class App extends React.Component {
 					onKeyPress={(e) => this.enterHandler(e)}
 					variant="outlined"
 				/>
+				<TasksList data={[ ...this.state.todo ]} />
 			</Container>
 		)
 	}
