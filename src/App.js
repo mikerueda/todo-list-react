@@ -1,30 +1,42 @@
 import React, { Component } from 'react'
-import { CssBaseline, Container } from '@material-ui/core'
+import { CssBaseline, Container, Button } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField'
-import nextId from 'react-id-generator'
+import Modal from '@material-ui/core/Modal'
 import TasksList from './components/TasksList'
+import idGen from './helpers/idGenerator'
+import './App.scss'
 
 class App extends Component {
 	state = {
 		task: '',
+		editField: '',
+		currentTask: '',
 		todo: [],
-		otraCosa: {},
-		otraMas: ''
+		isModalOpen: false
 	}
 
 	fieldHandler = (e) => {
-		this.setState({ task: e.target.value })
+		this.setState({ [e.target.name]: e.target.value })
 	}
 
 	enterHandler = (e) => {
-		if (e.key === 'Enter') {
+		if (e.key === 'Enter' && this.state.task) {
 			this.saveTask(e.target.name)
+		}
+	}
+
+	enterEditHandler = (e) => {
+		if (e.key === 'Enter' && this.state.editField) {
+			let newTodo = [ ...this.state.todo ]
+			let task = newTodo.find((e) => e.id === this.state.currentTask)
+			task.text = this.state.editField
+			this.setState({ todo: newTodo, isModalOpen: false })
 		}
 	}
 
 	saveTask = (field) => {
 		let value = this.state[field]
-		let newTodo = [ ...this.state.todo, { id: nextId('task-'), text: value, status: 'pending' } ]
+		let newTodo = [ ...this.state.todo, { id: idGen('task'), text: value, status: 'pending' } ]
 		this.setState({ [field]: '', todo: newTodo })
 	}
 
@@ -42,14 +54,24 @@ class App extends Component {
 		this.setState({ todo: newTodo })
 	}
 
+	openEdition = (id) => {
+		let newTodo = [ ...this.state.todo ]
+		let task = newTodo.find((e) => e.id === id)
+		this.setState({ editField: task.text, isModalOpen: true, currentTask: id })
+	}
+
 	componentDidMount = () => {
 		const persistedState = window.localStorage.getItem('todo-state')
-		this.setState({ ...(JSON.parse(persistedState) || { todo: [], otraCosa: {} }) })
+		this.setState({ ...(JSON.parse(persistedState) || { todo: [] }) })
+	}
+
+	toggleModal = () => {
+		this.setState({ isModalOpen: !this.state.isModalOpen })
 	}
 
 	componentDidUpdate() {
-		let { todo, otraCosa } = this.state
-		let persisted = { todo, otraCosa }
+		let { todo } = this.state
+		let persisted = { todo }
 		window.localStorage.setItem('todo-state', JSON.stringify(persisted))
 	}
 
@@ -74,6 +96,7 @@ class App extends Component {
 					data={pending}
 					changeStatus={this.changeStatus}
 					deleteTask={this.deleteTask}
+					editTask={this.openEdition}
 				/>
 				<TasksList
 					title={'completadas'}
@@ -81,7 +104,22 @@ class App extends Component {
 					data={completed}
 					changeStatus={this.changeStatus}
 					deleteTask={this.deleteTask}
+					editTask={this.openEdition}
 				/>
+				<Modal open={this.state.isModalOpen} onClose={this.toggleModal}>
+					<div className={'modal-content'}>
+						<Container>
+							<h3>Editar:</h3>
+							<TextField
+								value={this.state.editField}
+								name={'editField'}
+								onChange={(e) => this.fieldHandler(e)}
+								onKeyPress={(e) => this.enterEditHandler(e)}
+							/>
+							<Button>Cancelar</Button>
+						</Container>
+					</div>
+				</Modal>
 			</Container>
 		)
 	}

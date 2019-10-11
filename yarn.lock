@@ -8521,6 +8521,11 @@ react-error-overlay@^6.0.3:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.3.tgz#c378c4b0a21e88b2e159a3e62b2f531fd63bf60d"
   integrity sha512-bOUvMWFQVk5oz8Ded9Xb7WVdEi3QGLC8tH7HmYP0Fdp4Bn3qw0tRFmr5TW6mvahzvmrK4a6bqWGfCevBflP+Xw==
 
+react-id-generator@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-id-generator/-/react-id-generator-2.0.0.tgz#64f4d9dcb9493c3ba9c0de036380acb3b4fe358b"
+  integrity sha512-MU07dynz2xNWSHHaKSk9cDZh6JkfbsM1lSfOCTl9TnEKX2l+mgf4Q6pn1GVKM4KxTVN3AeCxky09zdaNXE16GA==
+
 react-is@^16.7.0, react-is@^16.8.6:
   version "16.10.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.10.2.tgz#984120fd4d16800e9a738208ab1fba422d23b5ab"

@@ -1,7 +1,7 @@
 import React from 'react'
 import { List, ListItem, ListItemText, Button } from '@material-ui/core'
 
-const TasksList = ({ data, changeStatus, tag, title, deleteTask }) => {
+const TasksList = ({ data, changeStatus, tag, title, deleteTask, editTask }) => {
 	return (
 		<List>
 			<h2>{title}</h2>
@@ -12,6 +12,9 @@ const TasksList = ({ data, changeStatus, tag, title, deleteTask }) => {
 					</ListItemText>
 					<Button variant={'contained'} onClick={() => deleteTask(e.id)}>
 						x
+					</Button>
+					<Button variant={'contained'} onClick={() => editTask(e.id)}>
+						Editar
 					</Button>
 				</ListItem>
 			))}
