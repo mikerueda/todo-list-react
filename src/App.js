@@ -7,7 +7,9 @@ import TasksList from './components/TasksList'
 class App extends Component {
 	state = {
 		task: '',
-		todo: []
+		todo: [],
+		otraCosa: {},
+		otraMas: ''
 	}
 
 	fieldHandler = (e) => {
@@ -33,6 +35,24 @@ class App extends Component {
 		this.setState({ todo: newTodo })
 	}
 
+	deleteTask = (id) => {
+		let newTodo = [ ...this.state.todo ]
+		let task = newTodo.find((e) => e.id === id)
+		newTodo.splice(newTodo.indexOf(task), 1)
+		this.setState({ todo: newTodo })
+	}
+
+	componentDidMount = () => {
+		const persistedState = window.localStorage.getItem('todo-state')
+		this.setState({ ...(JSON.parse(persistedState) || { todo: [], otraCosa: {} }) })
+	}
+
+	componentDidUpdate() {
+		let { todo, otraCosa } = this.state
+		let persisted = { todo, otraCosa }
+		window.localStorage.setItem('todo-state', JSON.stringify(persisted))
+	}
+
 	render() {
 		const completed = [ ...this.state.todo.filter((e) => e.status === 'completed') ]
 		const pending = [ ...this.state.todo.filter((e) => e.status === 'pending') ]
@@ -48,8 +68,20 @@ class App extends Component {
 					onKeyPress={(e) => this.enterHandler(e)}
 					variant="outlined"
 				/>
-				<TasksList title={'pendientes'} tag={'( )'} data={pending} changeStatus={this.changeStatus} />
-				<TasksList title={'completadas'} tag={'(x)'} data={completed} changeStatus={this.changeStatus} />
+				<TasksList
+					title={'pendientes'}
+					tag={'( )'}
+					data={pending}
+					changeStatus={this.changeStatus}
+					deleteTask={this.deleteTask}
+				/>
+				<TasksList
+					title={'completadas'}
+					tag={'(x)'}
+					data={completed}
+					changeStatus={this.changeStatus}
+					deleteTask={this.deleteTask}
+				/>
 			</Container>
 		)
 	}
